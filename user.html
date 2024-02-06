@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="java.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+</head>
+
+<body>
+    <!-- This script got from frontendfreecode.com -->
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="#">FLASH</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        <img class="img-responsive img-rounded" src="eu.jpg" alt="User picture" />
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">
+                            <STROng>Alan bruno</STROng>
+
+                        </span>
+
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <div class="sidebar-search">
+                    <div>
+                        <div class="input-group">
+                            <input type="text" class="form-control search-menu" placeholder="Pesquisar paginas..." />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>Paginas</span>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>Minhas paginas</span>
+                                <span class="badge badge-pill badge-warning">New</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            Pagina 1
+
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Pagina 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Pagina 3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+
+
+
+                        <li class="header-menu">
+                            <span>Extra</span>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-calendar"></i>
+                                <span>Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-folder"></i>
+                                <span>Examples</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+            <div class="sidebar-footer">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge badge-pill badge-warning notification">3</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-power-off"></i>
+                </a>
+                <a href="confi.html">
+                    <i class="fa fa-cog"></i>
+                    <span class="badge-pill"></span>
+                </a>
+            </div>
+        </nav>
+
+
+
+        <!-- This script got from frontendfreecode.com -->
+        <div class="page-content page-container" id="page-content">
+            <div class="padding">
+                <div class="row container-fluid d-flex justify-content-center">
+                    <div class="col-lg-12 col-xl-6">
+                        <!-- Draggable Without Images card start -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-header-text">Draggable Grid with cards</h5>
+                            </div>
+                            <div class="card-block">
+                                <div class="row" id="sortable">
+
+                                    <div class="col-6 m-b-20 flip-card" draggable="false">
+                                        <div class="card-sub flip-card-inner" style="position: relative;">
+                                            <div class="flip-card-front">
+
+                                                <img class="card-img-top img-fluid"
+                                                    src="http://frontendfreecode.com/codes/files/card1.jpg"
+                                                    alt="Card image cap">
+                                                <div class="card-block">
+
+                                                    <p class="card-text" contenteditable="true">That might be little bit
+                                                        risky to have crew
+                                                        member like them.</p>
+                                                    <button class="edit-btn-back material-symbols-outlined"
+                                                        style="position: absolute; top: 0; right: 0;">edit</button>
+                                                    <div class="card-options-menu"
+                                                        style="display:none; position: absolute; right: 0; top: 24px; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                                        <ul style="list-style: none; margin: 0; padding: 0;">
+                                                            <li><button class="edit-card">Editar</button></li>
+                                                            <li><button class="duplicate-card">Duplicar</button></li>
+                                                            <li><button class="add-card">Adicionar</button></li>
+                                                            <li><button class="delete-card">Excluir</button></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flip-card-back">
+                                                <p contenteditable="true">oi</p>
+                                                <button class="edit-btn-front material-symbols-outlined"
+                                                    style="position: absolute; top: -280px; right: 0;">edit</button>
+                                                <div class="card-options-menu"
+                                                    style="display:none; position: absolute; right: 0; top: 24px; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                                    <ul style="list-style: none; margin: 0; padding: 0;">
+                                                        <li><button class="edit-card">Editar</button></li>
+                                                        <li><button class="duplicate-card">Duplicar</button></li>
+                                                        <li><button class="add-card">Adicionar</button></li>
+                                                        <li><button class="delete-card">Excluir</button></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- Draggable Without Images card end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</body>
+<script>
+    $(".sidebar-dropdown > a").click(function () {
+        $(".sidebar-submenu").slideUp(200);
+        if ($(this).parent().hasClass("active")) {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this).parent().removeClass("active");
+        } else {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this).next(".sidebar-submenu").slideDown(200);
+            $(this).parent().addClass("active");
+        }
+    });
+    $("#close-sidebar").click(function () {
+        $(".page-wrapper").removeClass("toggled");
+    });
+    $("#show-sidebar").click(function () {
+        $(".page-wrapper").addClass("toggled");
+    });
+    $(document).ready(function () {
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+    });
+    $(document).ready(function () {
+        // Outras inicializações aqui
+
+        $('.flip-card').click(function () {
+            var $cardInner = $(this).find('.flip-card-inner');
+            if ($cardInner.hasClass('flipped')) {
+                $cardInner.removeClass('flipped').css('transform', '');
+            } else {
+                $cardInner.addClass('flipped').css('transform', 'rotateY(180deg)');
+            }
+        });
+    });
+    // Função para duplicar cartão
+   
+        $(document).ready(function () {
+            // Manipula clique no botão de edição da frente
+            $('.edit-btn-back').click(function (e) {
+                e.stopPropagation(); // Impede que o cartão vire
+                var currentTextElement = $(this).siblings('p');
+                currentTextElement.attr('contenteditable', 'true');
+                currentTextElement.focus();
+            });
+
+            // Manipula clique no botão de edição do verso
+            $('.edit-btn-front').click(function (e) {
+                e.stopPropagation(); // Impede que o cartão vire
+                var currentTextElement = $(this).siblings('p');
+                currentTextElement.attr('contenteditable', 'true');
+                currentTextElement.focus();
+            });
+
+            // Quando o usuário terminar de editar, desative a edição
+            $('p[contenteditable="true"]').blur(function () {
+                $(this).attr('contenteditable', 'false');
+            });
+        });
+        $(document).ready(function () {
+    // Função de duplicação
+    $('#page-content').on('click', '.duplicate-card', function () {
+        var cardToDuplicate = $(this).closest('.flip-card');
+        var clonedCard = cardToDuplicate.clone();
+        // Insere o card duplicado no DOM, após o original
+        cardToDuplicate.after(clonedCard);
+    });
+});
+
+
+
+
+
+    // JavaScript para alternar a visibilidade do menu dropdown
+
+
+</script>
+
+</html>

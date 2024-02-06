@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
+    <script src="java.js" ></script>
+</head>
+<body>
+      <!-- This script got from frontendfreecode.com -->
+      <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="user.html">FLASH</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        <img class="img-responsive img-rounded" src="eu.jpg" alt="User picture" />
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">
+                            <a href="user.html">
+
+                                <STROng>Alan bruno</STROng>
+                            </a>
+                            
+                        </span>
+                       
+                        
+                    </div>
+                </div>
+                <!-- sidebar-header  -->
+                <div class="sidebar-search">
+                    <div>
+                        <div class="input-group">
+                            <input type="text" class="form-control search-menu" placeholder="Pesquisar paginas..." />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>Paginas</span>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>Minhas paginas</span>
+                                <span class="badge badge-pill badge-warning">New</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            Pagina 1
+                                           
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Pagina 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Pagina 3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                     
+                  
+                     
+                  
+                        <li class="header-menu">
+                            <span>Extra</span>
+                        </li>
+                      
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-calendar"></i>
+                                <span>Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-folder"></i>
+                                <span>Examples</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+            <div class="sidebar-footer">
+                <a href="#">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge badge-pill badge-warning notification">3</span>
+                </a>
+                <a href="#">
+                    <i class="fa fa-power-off"></i>
+                </a>
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    <span class="badge-pill"></span>
+                </a>
+            </div>
+        </nav>
+        <main class="page-content">
+
+
+
+            <form action="">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="" placeholder="Nome">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Sobrenome</label>
+                    <input type="text" class="form-control" id="" placeholder="Sobrenome">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="" placeholder="name@example.com">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">senha</label>
+                    <input type="password" class="form-control" id="senha1" placeholder="Senha">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Confirma senha</label>
+                    <input type="password" class="form-control" id="senha2" placeholder="Confirma senha">
+                  </div>
+                
+                    <button type="submit" class="btn btn-success" >Enviar</button>
+                
+                <button type="reset" class="btn btn-primary" >Limpar</button>
+            </form>
+        
+        </main>
+        <div>
+            </body>
+            <script>
+                $(".sidebar-dropdown > a").click(function () {
+                    $(".sidebar-submenu").slideUp(200);
+                    if ($(this).parent().hasClass("active")) {
+                        $(".sidebar-dropdown").removeClass("active");
+                        $(this).parent().removeClass("active");
+                    } else {
+                        $(".sidebar-dropdown").removeClass("active");
+                        $(this).next(".sidebar-submenu").slideDown(200);
+                        $(this).parent().addClass("active");
+                    }
+                });
+                $("#close-sidebar").click(function () {
+                    $(".page-wrapper").removeClass("toggled");
+                });
+                $("#show-sidebar").click(function () {
+                    $(".page-wrapper").addClass("toggled");
+                });
+                </script>
+        </html>
