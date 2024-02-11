@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block perfil%}
+
+<div class="page-wrapper chiller-theme toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="{% url 'home' %}">flashs</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img class="img-responsive img-rounded" src="https://frontendfreecode.com/img/user.jpg"
+                        alt="User picture" />
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+                        <!-- -editar: dinamico-->
+                        <strong>{{request.user.username}}</strong>
+                    </span>
+                    <!-- -editar:  precisa?-->
+                    <span class="user-role">Administrator</span>
+                    <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <!-- -editar: para outros tipos de status -->
+                        <span>Online</span>
+                    </span>
+                </div>
+            </div>
+            <!-- sidebar-header  -->
+            <div class="sidebar-search">
+                <div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-menu" placeholder="Search..." />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar-search  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>General</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Paginas</span>
+                            <span class="badge badge-pill badge-warning">novo</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <button class="add-page" onclick="adicionarPagina()">+</button>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Paginas
+                                        <span class="badge badge-pill badge-success">Pro</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="perfil.html">pagina 2</a>
+                                </li>
+                                <li>
+                                    <a href="perfil.html">pagina 3</a>
+                                </li>
+                                <li>
+                                    <!--adicionar mais paginas aqui-->
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Grupo</span>
+                            <span class="badge badge-pill badge-danger">1</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">MATEMATICA </a>
+                                </li>
+                                <li>
+                                    <a href="#">Portugues</a>
+                                </li>
+                                <li>
+                                    <a href="#">Biologia</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Components</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">General</a>
+                                </li>
+                                <li>
+                                    <a href="#">Panels</a>
+                                </li>
+                                <li>
+                                    <a href="#">Tables</a>
+                                </li>
+                                <li>
+                                    <a href="#">Icons</a>
+                                </li>
+                                <li>
+                                    <a href="#">Forms</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-chart-line"></i>
+                            <span>Charts</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Pie chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Line chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Bar chart</a>
+                                </li>
+                                <li>
+                                    <a href="#">Histogram</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-globe"></i>
+                            <span>Maps</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Google maps</a>
+                                </li>
+                                <li>
+                                    <a href="#">Open street map</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="header-menu">
+                        <span>Extra</span>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Documentation</span>
+                            <span class="badge badge-pill badge-primary">Beta</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-calendar"></i>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-folder"></i>
+                            <span>Examples</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+            <a href="#">
+                <i class="fa fa-bell"></i>
+                <span class="badge badge-pill badge-warning notification">3</span>
+            </a>
+            <a href="#">
+                <i class="fa fa-envelope"></i>
+                <span class="badge badge-pill badge-success notification">7</span>
+            </a>
+            <a href="{% url 'configuracao' %}">
+                <i class="fa fa-cog"></i>
+                <span class="badge-sonar"></span>
+            </a>
+            <a href="{% url 'logout' %}">
+
+                <form action="{% url 'logout' %}" method="POST">{% csrf_token %}
+                    <i>
+                        <button type="submit" class="fa fa-power-off sair" style="
+                       background-color: rgba(157, 156, 156, 0);
+                        color: rgb(133, 165, 165);
+
+                       "></button>
+
+                    </i>
+                </form>
+            </a>
+
+        </div>
+    </nav>
+{%endblock%}
+    {% block conf %}
+    <main class="page-content">
+
+
+
+        <form action="">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="" placeholder="Nome">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Sobrenome</label>
+                <input type="text" class="form-control" id="" placeholder="Sobrenome">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="" placeholder="name@example.com">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">senha</label>
+                <input type="password" class="form-control" id="senha1" placeholder="Senha">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Confirma senha</label>
+                <input type="password" class="form-control" id="senha2" placeholder="Confirma senha">
+              </div>
+            
+                <button type="submit" class="btn btn-success" >Enviar</button>
+            
+            <button type="reset" class="btn btn-primary" >Limpar</button>
+        </form>
+    
+    </main>
+    {% endblock %}
+    {% block script %}
+    <script src="{% static 'js/script.js'%}"></script>
+    {%endblock%}
