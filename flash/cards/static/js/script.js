@@ -32,6 +32,7 @@ addQquestion.addEventListener("click", ()=>{
     container.classList.add("hide");
     question.value = "";
     answer.value = "";
+
     addQuestionCard.classList.remove("hide");
 })
 
@@ -71,7 +72,8 @@ function viewlist(){
     var displayAnswer = document.createElement("p");
     displayAnswer.classList.add("answer-div", "hide");
     displayAnswer.innerText = answer.value;
-
+    console.log(question.value)
+    console.log(answer.value)
     var link = document.createElement('a');
     link.setAttribute("href", "#");
     link.setAttribute("class", "show-hide-btn");
@@ -137,16 +139,129 @@ const disableButtons = (value) =>{
     });
 };
 
-function adicionarPagina() {
-    const novaPagina = document.createElement("li");
-    const linkNovaPagina = document.createElement("a");
-    linkNovaPagina.href = "perfil.html"; // Defina o link da nova página
-    linkNovaPagina.textContent = "Nova Página"; // Defina o texto da nova página
-    novaPagina.appendChild(linkNovaPagina);
-    
-    // Adicione a nova página à lista existente
-    const listaPaginas = document.querySelector(".sidebar-submenu ul");
-    listaPaginas.appendChild(novaPagina);
 
-    alert("Nova página adicionada!");
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function adicionarPagina2() {
+    // Solicita ao usuário o título da nova página
+    const tituloPagina = prompt("Digite o título da nova página:");
+    const csrftoken = getCookie('csrftoken');
+    
+    // Verifica se o título foi fornecido
+    if (tituloPagina) {
+        fetch('/user/criar_pagina/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+                // Inclua outros headers necessários, como CSRF token
+            },
+            body: JSON.stringify({
+                titulo: tituloPagina, // Envie o título como parte da requisição
+                
+                // Você pode adicionar outros dados necessários aqui
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            alert("Nova página adicionada com sucesso!");
+
+            // Atualiza a interface do usuário
+            const novaPagina = document.createElement("li");
+            const linkNovaPagina = document.createElement("a");
+            
+            linkNovaPagina.href = data.urlPagina;
+            linkNovaPagina.textContent = tituloPagina; // Usa o título fornecido pelo usuário
+            novaPagina.appendChild(linkNovaPagina);
+
+            // Adiciona a nova página à lista existente
+            const listaPaginas = document.querySelector(".sidebar-submenu ul");
+            listaPaginas.appendChild(novaPagina);
+        })
+        .catch((error) => {
+            console.error('Erro:', error);
+            alert("Houve um erro ao adicionar a nova página. Por favor, tente novamente.");
+        });
+    } else {
+        alert("A criação da página foi cancelada ou o título não foi fornecido.");
+    }
+}
+
+carregarPaginasUsuario();
+function carregarPaginasUsuario() {
+    fetch('/user/listar_paginas/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Adicione headers adicionais aqui se necessário, como tokens de autenticação
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const listaPaginas = document.querySelector(".sidebar-submenu ul");
+        data.paginas.forEach((pagina,index) => {
+
+            const paginaElemento = document.createElement("li");
+            const linkPagina = document.createElement("a");
+            linkPagina.href = `/user/paginas/${pagina.id}/`;  // Ajuste o URL conforme necessário
+            linkPagina.textContent = pagina.titulo;
+            paginaElemento.appendChild(linkPagina);
+
+
+            
+            if (index > 0) {
+                const iconeExcluir = document.createElement("i");
+                iconeExcluir.classList.add("fa-solid", "fa-trash");
+                iconeExcluir.style.marginLeft = "10px";
+                iconeExcluir.onclick = function(event) {
+                    event.stopPropagation(); // Impede que o evento de clique no link seja acionado
+                    event.preventDefault(); // Impede o comportamento padrão do link
+                    excluirPagina(pagina.id);
+                };
+                // Adiciona um espaço e o ícone diretamente ao linkPagina
+                linkPagina.appendChild(iconeExcluir);
+            }
+            paginaElemento.appendChild(linkPagina);
+            listaPaginas.appendChild(paginaElemento);
+        });
+    })
+    .catch(error => console.error('Erro ao carregar páginas:', error));
+}
+
+
+function excluirPagina(paginaId){
+    if(!confirm(`Deseja realmente excluir essa página?`)){
+        return;
+    }
+
+    fetch(`/user/excluir_pagina/${paginaId}/`,{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'X-CSRFToken' : getCookie('csrftoken'),
+
+        },
+        body: JSON.stringify({id: paginaId})
+    }).then(response =>{
+        if(response.ok){
+            alert('Pagina excluida com sucesso!');
+            window.location.reload();
+        }else{
+            alert('nao foi possivel excluir essa pagina')
+        }
+    }).catch(error => console.error('Erro ao excluir pagina:', error));
 }

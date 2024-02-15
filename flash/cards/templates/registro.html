@@ -330,7 +330,7 @@
 	<a href="http://frontendfreecode.com/" class="logo" target="_blank">
 		Your LOGO
 	</a>
-	<input type="hidden" name="next" value="{{next}}">
+
 
 	<div class="section">
 		<div class="container">
@@ -342,7 +342,7 @@
 								<div class="card-back">
 									<div class="center-wrap">
 										<div class="section text-center">
-											<form action="" method="POST">{% csrf_token %}
+											<form action="{%url 'cadastro' %}" method="POST">{% csrf_token %}
 												<h4 class="mb-4 pb-3">Criar conta</h4>
 												{% if error_message %}
 												<p>{{ error_message }}</p>
@@ -366,9 +366,8 @@
 													<span id="password-status"></span>
 												</div>
 
-												<button type="submit" id="entrar" class="btn mt-4">Entrar</button>
-												<p class="mb-0 mt-4 text-center"><a href="{%url 'login'%}"
-														class="link">Logar</a></p>
+												<button type="submit" id="Criar" class="btn mt-4">Criar</button>
+												<p class="mb-0 mt-4 text-center link"><a href="{% url 'login_user' %}" >Logar</a></p>
 
 											</form>
 										</div>

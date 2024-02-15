@@ -96,7 +96,8 @@
                                     <a href="#">MATEMATICA </a>
                                 </li>
                                 <li>
-                                    <a href="#">Portugues</a>
+                                    <a href="#">Portugues <i class="fa-solid fa-trash"></i></a>
+                                    
                                 </li>
                                 <li>
                                     <a href="#">Biologia</a>
@@ -155,13 +156,13 @@
                 <i class="fa fa-envelope"></i>
                 <span class="badge badge-pill badge-success notification">7</span>
             </a>
-            <a href="{% url 'configuracao' %}">
+            <a href="">
                 <i class="fa fa-cog"></i>
                 <span class="badge-sonar"></span>
             </a>
-            <a href="">
+            <a href="{% url 'logout' %}">
 
-                <form action="{% url 'logout' %}" method="POST">{% csrf_token %}
+                <form action="" method="POST">{% csrf_token %}
                     <i>
                         <button type="submit" class="fa fa-power-off sair" style="
                        background-color: rgba(157, 156, 156, 0);
@@ -180,7 +181,13 @@
 
     {% block cards %}
     <!-- ADICIONA CARD  -->
-
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="container">
         <div class="add-flashcard-con">
             <!--//caso eu queria limitar o uso do usuario remover este botão-->

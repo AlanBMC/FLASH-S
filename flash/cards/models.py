@@ -11,7 +11,7 @@ class Pagina(models.Model):
     
 
 class Usuario(models.Model):
-    email = models.EmailField(unique=True)
+    arroba = models.TextField(unique=True)
     paginas = models.ManyToManyField(Pagina, related_name='usuarios')
     def __str__(self):
-        return self.username
+        return self.arroba

@@ -331,8 +331,8 @@
     <a href="http://frontendfreecode.com/" class="logo" target="_blank">
 		Your LOGO
 	</a>
-	<form  method="POST"> {%  csrf_token %}
-        <input type="hidden" name="next" value="{{next}}">
+	<form action=""  method="POST"> {%  csrf_token %}
+        
 
 		<div class="section">
 			<div class="container">
@@ -345,7 +345,9 @@
 										<div class="center-wrap">
 											<div class="section text-center">
 												<h4 class="mb-4 pb-3">Login</h4>
-
+												{% if erro %}
+												<p>{{ erro }}</p>
+												{% endif %}
 												<div class="form-group">
 													<input type="text" name="username" class="form-style"
 														placeholder="Your Email" id="logemail" autocomplete="off">
@@ -359,7 +361,7 @@
 												
                                                 <button type="submit" class="btn mt-4">Entrar</button>
 												<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Esqueceu sua senha?</a></p>
-                                                        <p class="mb-0 mt-4 text-center"><a href="{%url 'registro'%}" class="link">Criar Conta</a></p>
+                                                        <p class="mb-0 mt-4 text-center"><a href="{% url 'cadastro' %}" class="link">Criar Conta</a></p>
 
 											</div>
 										</div>
@@ -371,7 +373,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="bcl"><a style="font-size:8pt;text-decoration:none;" href="http://www.devanswer.com">Free Frontend</a>
+		<div id="bcl">
 		</div>
 	</form>
 	   
