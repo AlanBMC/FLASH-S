@@ -346,7 +346,7 @@ def delete_simulado(request):
         id_pagina = request.POST.get('id_pagina')
         simulado = get_object_or_404(Simulados, id=id_questao)
         simulado.delete()
-        return redirect('simulado', id_pagina)
+        return redirect('simulado', id_pagina) 
 
 
 @login_required
