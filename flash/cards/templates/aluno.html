@@ -1,0 +1,320 @@
+{%extends 'base.html' %}
+{% load static %}
+
+{% block perfil %}
+<!-- MENU INICIO FZER ELE DE BASE -->
+
+<div class="page-wrapper chiller-theme toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="{% url 'paginas' paginas.id %}">flashs</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img src="{{  foto_perfil }}" width="30" height="40" alt="User picture" />
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+
+                        <strong>
+                            <a href="{% url 'paginas' paginas.id %}" style="text-decoration: none; color: inherit;">
+
+                                {{request.user.username}}
+                            </a>
+                        </strong>
+                    </span>
+                    <!-- -editar:  precisa?-->
+                    <span class="user-role">{{tipo_user}}</span>
+                    <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <!-- -editar: para outros tipos de status -->
+                        <span>Online</span>
+                    </span>
+                </div>
+            </div>
+            <!-- sidebar-header  -->
+            <div class="sidebar-search">
+                <div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-menu" placeholder="Search..." />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar-search  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Minhas paginas</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Cards</span>
+
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <button class="add-page" onclick="adicionarPagina2()">+</button>
+                                </li>
+                                {% for paginas_cards in paginas_com_card %}
+                                <li>
+                                    <a href="{% url 'paginas' paginas_cards.id %}">
+                                        {{paginas_cards.titulo}}
+                                    </a>
+                                </li>
+                                {%empty%}
+                                    <li> <a href="">Sem paginas</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Questões</span>
+
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                {%for pgs_compartilhadas in paginas_compartilhadas %}
+                                <li>
+                                    <a href="{% url 'paginas_compartilhadas' pgs_compartilhadas.id %}">
+                                        {{pgs_compartilhadas.titulo}}
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li><a>Sem páginas</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Minhas questões</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <form action="{% url 'add_pagina_simulado' %}" method="POST">{% csrf_token %}
+                                    <input type="hidden" name="titulo_pagina_simulado" value='Simulado 1'>
+                                    <button class="add-page" name="add_pagina_simulado">+</button>
+                                </form>
+
+                                {% for pg in paginas_simulado %}
+                                <li>
+                                    <a href="{% url 'simulado' pg.id %}">
+                                        {{pg.titulo}}
+                                    </a>
+                                    <p>
+                                        {{pg.id}}
+                                    </p>
+                                </li>
+                            
+                                {% endfor  %}
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+            <a href="#">
+                <i class="fa fa-bell"></i>
+                <span class="badge badge-pill badge-warning notification">3</span>
+            </a>
+            <a href="#">
+                <i class="fa fa-envelope"></i>
+                <span class="badge badge-pill badge-success notification">7</span>
+            </a>
+            <a href="{% url 'configurar' %}">
+                <i class="fa fa-cog"></i>
+                <span class="badge-sonar"></span>
+            </a>
+            <a href="{% url 'logout' %}">
+
+                <form action="{% url 'logout' %}" method="POST">{% csrf_token %}
+                    <i>
+                        <button type="submit" class="fa fa-power-off sair" style="
+                       background-color: rgba(157, 156, 156, 0);
+                        color: rgb(133, 165, 165);
+
+                       "></button>
+
+                    </i>
+                </form>
+            </a>
+
+        </div>
+        <!-- pega o ID da pagina e no javascritp faz os procedimentos para adicionar o card a pagina correta. -->
+
+        <div id="pagina-data" data-pagina-id="{{ paginas.id }}"></div>
+
+    </nav>
+
+    {% endblock %}
+
+    {% block cards %}
+    <!-- ADICIONA CARD  -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="container">
+        <div class="add-flashcard-con">
+            <!--//caso eu queria limitar o uso do usuario remover este botão-->
+            <button id="add-flashcard"> + </button>
+        </div>
+
+
+
+        <!--questao e resposta-->
+
+
+
+
+
+
+
+
+
+        <!--modal add aberto-->
+        <div id="card-con">
+            <div class="card-list-container">
+                {% for card in cards %}
+                <div class="card">
+
+                    <strong> {{card.perguntas}}</strong>
+                    <button type="button" onclick="ver_resposta('{{card.id}}')"> Resposta </button>
+                    <div id="ver_resposta_{{card.id}}" class="resposta" style="display: none;">
+                        <p> {{card.respostas}}</p>
+                    </div>
+
+
+                    <!-----------Edita card -->
+                    <!-- botao para editar -->
+                    <div class="buttons-con">
+                        <button class="edit" type="submit"
+                            onclick="edit_cards('{{card.id}}', '{{card.perguntas}}', '{{card.respostas}}')"
+                            id="edit_cards"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                        <!---------------fim Edita card -->
+
+                        <!-- delete card -->
+                        <form action="{% url 'delete_card' %}" method="POST">{% csrf_token %}
+                            <input type="hidden" name="card_id" value="{{card.id}}">
+                            <input type="hidden" name="pagina_id" value="{{paginas.id}}">
+
+                            <button type="submit" class="delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!--modal add aberto-->
+
+
+
+    <!------------------- modal edit card---------------->
+    <form action="{% url 'edit_cards' %}" method="POST"> {% csrf_token %}
+
+        <div style="display:none; position: relative;   width: 90vw;
+                                                                        max-width: 34em;
+                                                                        flex-direction: column;
+                                                                        justify-content: center;
+                                                                        background-color: floralwhite;
+                                                                        position: absolute;
+                                                                        
+                                                                        align-items: center;
+                                                                        transform: translate(-50%, -50%);
+                                                                        top: 50%;
+                                                                        left: 50%;
+                                                                        padding: 3em 2em;
+                                                                        border-radius: 0.6em;
+                                                                        box-shadow: 0 1em 2em rgba(28, 0, 80, 0.21);"
+            id="modal">
+
+
+
+            <button onclick="fecha_modal()" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+
+
+
+            <div class="row">
+                <label for="">Pergunta:</label><br>
+                <textarea name="pergunta_editada" id="pergunta_get" cols="4" rows="4"></textarea>
+
+                <label for="">Resposta:</label><br>
+                <textarea name="resposta_editada" id="resposta_get" cols="4" rows="4"></textarea>
+
+                <input type="hidden" id="id_card" name="card_id" value="">
+                <input type="hidden" id="paginaID" name="pagina_id" value="{{ paginas.id }}">
+
+                <button class="salva-modal-btn" type="submit">Salvar</button>
+            </div>
+
+        </div>
+
+    </form>
+    <!------------------- fim modal edit card------------------>
+
+
+    <!--add cards e aparece os dois modal's-->
+    <div class="question-container hide" id="add-question-card">
+        <h2>add flahs</h2>
+        <div class="wrapper">
+
+            <!--mensagem de erro-->
+            <div class="error-con">
+                <span class="hide" id="error">erro ao enviar</span>
+            </div>
+            <!--botao fechar -->
+            <i id="close-btn" class="fa-solid fa-xmark"></i>
+        </div>
+
+
+
+
+        <label for="question">Questão:</label>
+        <textarea class="input" id="question" name="question" rows="2" placeholder="Digite aqui..."></textarea><br>
+        <label for="answer">Resposta:</label>
+        <textarea class="input" id="answer" name="answer" rows="4" placeholder="Digite aqui..."></textarea>
+        <input type="hidden" value="{{ paginas.id }}" name="id_pagina">
+
+        <button type="submit" id="save-btn">Salvar</button>
+
+    </div>
+    <form id="cardForm" method="POST" action="{% url 'add_cards' %}">
+        {% csrf_token %}
+        <input type="hidden" id="formQuestion" name="question">
+        <input type="hidden" id="formAnswer" name="answer">
+        <input type="hidden" id="paginaID" name="pagina_id" value="{{ paginas.id }}">
+        <!-- Outros campos que possam ser necessários -->
+    </form>
+
+    {%endblock%}
+
+    {% block script %}
+    <script src="{% static 'js/script.js'%}"></script>
+    {%endblock%}

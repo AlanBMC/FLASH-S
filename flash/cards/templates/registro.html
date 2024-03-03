@@ -16,7 +16,7 @@
 
 		body {
 			font-family: 'Poppins', sans-serif;
-			font-weight: 300;
+			font-weight: 300px;
 			font-size: 15px;
 			line-height: 1.7;
 			color: #c4c3ca;
@@ -42,13 +42,13 @@
 		}
 
 		p {
-			font-weight: 500;
+			font-weight: 500px;
 			font-size: 14px;
 			line-height: 1.7;
 		}
 
 		h4 {
-			font-weight: 600;
+			font-weight: 600px;
 		}
 
 		h6 span {
@@ -63,9 +63,7 @@
 			display: block;
 		}
 
-		.full-height {
-			min-height: 100vh;
-		}
+
 
 		[type="checkbox"]:checked,
 		[type="checkbox"]:not(:checked) {
@@ -115,7 +113,7 @@
 			position: relative;
 			width: 440px;
 			max-width: 100%;
-			height: 400px;
+			height: 60vh;
 			-webkit-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			perspective: 800px;
@@ -133,10 +131,9 @@
 			transition: all 600ms ease-out;
 		}
 
-		.card-front,
 		.card-back {
 			width: 100%;
-			height: 100%;
+			height: 120%;
 			background-color: #2a2b38;
 			background-image: url('http://frontendfreecode.com/img/pat.svg');
 			background-position: bottom center;
@@ -145,7 +142,7 @@
 			position: absolute;
 			border-radius: 6px;
 			left: 0;
-			top: 0;
+			top: -100px;
 			-webkit-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			-webkit-backface-visibility: hidden;
@@ -153,6 +150,7 @@
 			-o-backface-visibility: hidden;
 			backface-visibility: hidden;
 		}
+
 
 
 
@@ -180,7 +178,7 @@
 			padding-left: 55px;
 			height: 48px;
 			width: 100%;
-			font-weight: 500;
+			font-weight: 500px;
 			border-radius: 4px;
 			font-size: 14px;
 			line-height: 22px;
@@ -310,42 +308,97 @@
 
 		.logo {
 			position: absolute;
-			top: 30px;
-			right: 30px;
+			top: 10px;
+			right: 20px;
 			display: block;
 			z-index: 100;
 			transition: all 250ms linear;
 		}
 
+		.logo img:hover {
+			height: 37px;
+			border-radius: 50%;
+			width: auto;
+			transition: 0.3s;
+		}
+
 		.logo img {
-			height: 26px;
+			height: 35px;
 			width: auto;
 			display: block;
+			border-radius: 50%;
+
+		}
+
+		.alert-messages {
+			margin-top: 20px;
+		}
+
+		.alert {
+			padding: 10px;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			color: white;
+		}
+
+		.alert-success {
+			background-color: #4CAF50;
+			/* Verde */
+		}
+
+		.alert-error,
+		.alert-danger {
+			background-color: #f44336;
+			/* Vermelho */
+		}
+
+		.alert-info {
+			background-color: #2196F3;
+			/* Azul */
+		}
+
+		.alert-warning {
+			background-color: #ff9800;
+			/* Laranja */
 		}
 	</style>
 
 </head>
 
 <body>
-	<a href="http://frontendfreecode.com/" class="logo" target="_blank">
-		Your LOGO
+	<a href="{%url 'cadastro'%}" class="logo" target="_blank">
+		<img src="{%static 'img/logo2.jpg'%}">
 	</a>
 
+	<a href="{% url 'login_user' %}" style="margin: 7px; margin-top: 10px; top: 30px; right: 30px;"
+		class="btn">Logar</a>
 
 	<div class="section">
 		<div class="container">
 			<div class="row full-height justify-content-center">
-				<div class="col-12 text-center align-self-center py-5">
-					<div class="section pb-5 pt-5 pt-sm-2 text-center">
+				<div class="col-13 col-md-8 text-center align-self-center py-5">
+					<div class="section pb-2 pt-5 pt-sm-2 text-center">
 						<div class="card-3d-wrap mx-auto">
-							<div class="card-3d-wrapper">
+							<div class="card-10d-wrapper">
 								<div class="card-back">
 									<div class="center-wrap">
 										<div class="section text-center">
-											<form action="{%url 'cadastro' %}" method="POST">{% csrf_token %}
+											<form action="{%url 'cadastro' %}" enctype="multipart/form-data"
+												method="POST">{% csrf_token %}
 												<h4 class="mb-4 pb-3">Criar conta</h4>
 												{% if error_message %}
 												<p>{{ error_message }}</p>
+												{% endif %}
+												{% if messages %}
+												<div class="alert-messages">
+													{% for message in messages %}
+													<div
+														class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+														{{ message }}
+													</div>
+													{% endfor %}
+
+												</div>
 												{% endif %}
 												<div class="form-group">
 													<input type="text" name="username" class="form-style"
@@ -358,6 +411,7 @@
 														oninput="validateInput(this)">
 													<i class="input-icon uil uil-at"></i>
 												</div>
+
 												<div class="form-group mt-2">
 													<input type="password" name="password" class="form-style"
 														placeholder="Senha" id="password" autocomplete="off"
@@ -365,9 +419,21 @@
 													<i class="input-icon uil uil-lock-alt"></i>
 													<span id="password-status"></span>
 												</div>
+												<div class="form-group mt-2">
+													<select name="tipo_user" class="form-style">
+														<option value="aluno">Aluno</option>
+														<option value="professor">Professor</option>
+													</select>
+												</div>
+												<div class="form-group mt-2">
+													<input type="file" name="imagem_de_perfil" class="form-style"
+														id="img" autocomplete="off">
+													<i class="input-icon uil uil-user"></i>
+												</div>
+												<div class="form-group mt-2">
 
-												<button type="submit" id="Criar" class="btn mt-4">Criar</button>
-												<p class="mb-0 mt-4 text-center link"><a href="{% url 'login_user' %}" >Logar</a></p>
+													<button type="submit" id="Criar" class="btn mt-2">Criar</button>
+												</div>
 
 											</form>
 										</div>
@@ -380,8 +446,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="bcl"><a style="font-size:8pt;text-decoration:none;" href="http://www.devanswer.com">Free Frontend</a>
-	</div>
+
 	<script src="{% static 'js/js_registro.js' %}"></script>
 </body>
 
