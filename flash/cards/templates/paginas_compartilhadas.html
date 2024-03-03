@@ -1,0 +1,210 @@
+{%extends 'base.html' %}
+{% load static %}
+
+{% block perfil %}
+<!-- MENU INICIO FZER ELE DE BASE -->
+
+<div class="page-wrapper chiller-theme toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="{% url 'paginas' pagina_principal.id %}">flashs</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img  src="{{  foto_perfil }}" alt="User picture" width="100" height="100"  />
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+
+                        <strong>
+                            <a href="{% url 'paginas' pagina_principal.id %}"
+                                style="text-decoration: none; color: inherit;">
+
+                                {{request.user.username}}
+                            </a>
+                        </strong>
+                    </span>
+                    <!-- -editar:  precisa?-->
+                    <span class="user-role">{{tipo_user}}</span>
+                    <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <!-- -editar: para outros tipos de status -->
+                        <span>Online</span>
+                    </span>
+                </div>
+            </div>
+            <!-- sidebar-header  -->
+            <div class="sidebar-search">
+                <div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-menu" placeholder="Search..." />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar-search  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Minhas paginas</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Paginas de Cards</span>
+
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <button class="add-page" onclick="adicionarPagina2()">+</button>
+                                </li>
+                                {%for pgs in pg %}
+                                <li>
+                                    <a href="/user/paginas/{{pgs.id}}/">
+                                        {{pgs.titulo}}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                <li>
+                                    <!--adicionar mais paginas aqui-->
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Questões</span>
+
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                {%for pgs_compartilhadas in paginas_compartilhadas %}
+                                <li>
+                                    <a href="{% url 'paginas_compartilhadas' pgs_compartilhadas.id %}">
+                                        {{pgs_compartilhadas.titulo}}
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li><a>Sem páginas</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Minhas questões</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">General</a>
+                                </li>
+                                <li>
+                                    <a href="#">Panels</a>
+                                </li>
+                                <li>
+                                    <a href="#">Tables</a>
+                                </li>
+                                <li>
+                                    <a href="#">Icons</a>
+                                </li>
+                                <li>
+                                    <a href="#">Forms</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+            <a href="#">
+                <i class="fa fa-bell"></i>
+                <span class="badge badge-pill badge-warning notification">3</span>
+            </a>
+            <a href="#">
+                <i class="fa fa-envelope"></i>
+                <span class="badge badge-pill badge-success notification">7</span>
+            </a>
+            <a href="{% url 'configurar' %}">
+                <i class="fa fa-cog"></i>
+                <span class="badge-sonar"></span>
+            </a>
+            <a href="{% url 'logout' %}">
+
+                <form action="{% url 'logout' %}" method="POST">{% csrf_token %}
+                    <i>
+                        <button type="submit" class="fa fa-power-off sair" style="
+                       background-color: rgba(157, 156, 156, 0);
+                        color: rgb(133, 165, 165);
+
+                       "></button>
+
+                    </i>
+                </form>
+            </a>
+
+        </div>
+        <!-- pega o ID da pagina e no javascritp faz os procedimentos para adicionar o card a pagina correta. -->
+
+
+
+    </nav>
+
+    {% endblock %}
+
+    {% block cards %}
+    <!-- ADICIONA CARD  -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="container">
+        <div id="card-con">
+            <div class="card-list-container">
+                {% for card in cards %}
+                <div class="card">
+                    <strong> {{card.perguntas}}</strong>
+                    <button type="button" onclick="ver_resposta('{{card.id}}')"> Resposta </button>
+                    <div id="ver_resposta_{{card.id}}" class="resposta" style="display: none;">
+                        <p> {{card.respostas}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    {%endblock%}
+
+    {% block script %}
+    <script src="{% static 'js/script.js'%}"></script>
+    {%endblock%}
