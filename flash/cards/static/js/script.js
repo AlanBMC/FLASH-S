@@ -249,5 +249,80 @@ function excluirPagina(paginaId) {
     }).catch(error => console.error('Erro ao excluir pagina:', error));
 }
 
+// area de adicionar pergunta ao simulado
+const modal_add_pergunta = document.getElementById('modal_add_pergunta_simulado')
+
+function adicionar_pergunta(){
+    modal_add_pergunta.style.display = 'block'
+}
+function fecha_modal_add_pg(){
+    modal_add_pergunta.style.display = 'none'
+}
+// fim da area
 
 
+
+
+
+
+
+
+// ----- parte de edit_titulo_pg -- conf
+function edit_nome_pg(titulo_pg, id_pagina){
+    
+    var modal_edit_pg = document.getElementById('modal_edit_titulo_pg')
+    var modal_delete_pg = document.getElementById('modal_delete_pg')
+    var id_pagina_edit = document.getElementById('id_pagina_edit')
+    var titulo_pg_edit = document.getElementById('titulo_pagina')
+
+    modal_delete_pg.style.display= 'none'
+    modal_edit_pg.style.display = 'block'
+    id_pagina_edit.value=id_pagina
+    titulo_pg_edit.value=titulo_pg
+}
+
+function fecha_modal_edit_pg(){
+    var modal_edit_pg = document.getElementById('modal_edit_titulo_pg')
+
+    modal_edit_pg.style.display = 'none'
+}
+
+// ------ fim parte edit
+
+
+// ---- parte delete page --- conf
+
+function delete_pg(id_pagina){
+    var modal_delete_pg = document.getElementById('modal_delete_pg')
+    var id_pagina_delete = document.getElementById('id_pagina_delete')
+    var modal_edit_pg = document.getElementById('modal_edit_titulo_pg')
+    modal_edit_pg.style.display = 'none'
+
+    modal_delete_pg.style.display = 'block'
+    id_pagina_delete.value=id_pagina
+}
+
+function delete_pg_fechar_model(){
+    var modal_delete_pg = document.getElementById('modal_delete_pg')
+
+    modal_delete_pg.style.display= 'none'
+}
+
+// ------ fim delete page --- conf
+
+// ---------- delete card
+function delete_card(id_card, id_pagina){
+    var modal_delete_card = document.getElementById('modal_delete_card')
+    var modal_id_pagina = document.getElementById('id_pagina_do_card')
+    var modal_id_card = document.getElementById('id_card')
+    console.log('id_pagina delete card', id_pagina)
+    modal_id_card.value = id_card
+    modal_id_pagina.value = id_pagina
+    modal_delete_card.style.display = 'block'
+
+}
+function delete_card_fecha_modal(){
+    var modal_delete_card = document.getElementById('modal_delete_card')
+    modal_delete_card.style.display = 'none'
+}
+// ------ fim delete card 

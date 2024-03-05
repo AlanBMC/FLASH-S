@@ -19,10 +19,17 @@ urlpatterns = [
     path('add_alunos/', views.add_alunos, name='add_alunos'),
     path('paginas_compartilhadas/<int:pagina_compartilhada_id>/', views.paginas_compartilhadas, name='paginas_compartilhadas'),
 
+    #Area de conf
     path('simulado/<int:id_pagina>', views.simulado, name='simulado'),#aqui precisa de ID.
     path('questao_simulado/', views.questao_simulado, name='questao_simulado'),
     path('add_pagina_simulado/', views.add_pagina_simulado, name='add_pagina_simulado'), 
     path('checar_resposta/', views.checa_resposta_simulado, name='checa_resposta'),
     path('delete_questao/', views.delete_simulado, name='delete_questao'),
     path('edit_simulado/', views.edit_simulado, name='edit_simulado'),
+
+    #Area de conf
+    path('edit_paginas_conf/', views.edit_paginas_conf, name='edit_paginas_conf'),
+    path('edit_titulo_pag_conf/', views.edit_titulo_pag_conf, name='edit_titulo_pag_conf'),
+    path('delete_pg_conf/', views.delete_pg_conf, name='delete_pg_conf'),
+    path('dash_estatistica/', views.dash_estatistica, name='dash_estatistica')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

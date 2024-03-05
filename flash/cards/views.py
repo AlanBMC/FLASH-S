@@ -8,13 +8,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django
 from django.db import IntegrityError
-from .models import Usuario, Pagina, Cards, Simulados
+from .models import Usuario, Pagina, Cards, Simulados, EstatisticasSimulado
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import logout
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+import pandas as pd
+import matplotlib.pyplot as plt
+
 # Create your views here.
 
 
@@ -82,14 +85,16 @@ def paginas(request, pagina_id):
         # instancia do objeto(classe) pagina, com a condição vai me retorna todos os objetos paginas que tem o id que passei como parametro
         pagina = get_object_or_404(Pagina, id=pagina_id)
         paginas_compartilhadas = usuario.paginas_compartilhadas.all()
+        pagina_principal = usuario.paginas.all().first()
         paginas_cards2 = Pagina.objects.filter(
             cards__isnull=False, usuarios=usuario).distinct()
         paginas_com_simulados = Pagina.objects.filter(
             simulado__isnull=False).distinct()
-        print(paginas_com_simulados)
+
         conteudo = {'paginas': pagina,
                     'cards': cards,
                     'paginas_com_card': paginas_cards2,
+                    'pagina_principal': pagina_principal,
                     'paginas_simulado': paginas_com_simulados,
                     'tipo_user': usuario.tipo_user,
                     'paginas_compartilhadas': paginas_compartilhadas,
@@ -148,6 +153,7 @@ def listar_paginas_usuario(request):
         return JsonResponse({'erro': 'Usuário não encontrado'}, status=404)
 
 
+# ------------------ ARE DE CONFIGURAÇÃO ------------------
 @login_required
 def conf(request):
     if request.method == 'POST':
@@ -156,12 +162,49 @@ def conf(request):
         # assim que pega o ID atual do usuario logado
         user_arroba = request.user.username
         usuario = Usuario.objects.get(arroba=user_arroba)
+        usuario_atual = get_object_or_404(Usuario, arroba=user_arroba)
         pagina = usuario.paginas.all().first()
         PG = usuario.paginas.all()
         # fim do bloco (id atual)
         print(pagina, pagina.id, pagina.titulo)
 
-        return render(request, 'conf.html', {'paginas': pagina, 'pg_titulos': PG, 'tipo_user': usuario.tipo_user})
+        return render(request, 'conf.html', {'paginas': pagina, 'pg_titulos': PG, 'tipo_user': usuario.tipo_user, 'foto_perfil': usuario_atual.foto_perfil.url, 'usuario': usuario_atual})
+
+
+def edit_paginas_conf(request):
+    user_atual = request.user.username
+    usuario_atual = Usuario.objects.get(arroba=user_atual)
+
+    pagina = usuario_atual.paginas.all().first()
+    paginas_compartilhadas = usuario_atual.paginas_compartilhadas.all()
+    PG = Pagina.objects.filter(
+        cards__isnull=False, usuarios=usuario_atual).distinct()
+    paginas_com_simulados = Pagina.objects.filter(
+        simulado__isnull=False).distinct()
+
+
+    contexto = {'paginas': pagina,
+                'pg_titulos': PG, 'tipo_user': usuario_atual.tipo_user,
+                'foto_perfil': usuario_atual.foto_perfil.url,
+                'usuario': usuario_atual,
+                'paginas_simulados': paginas_com_simulados}
+    return render(request, 'edit_paginas.html', contexto)
+
+def edit_titulo_pag_conf(request):
+    if request.method == 'POST':
+        id_pagina = request.POST.get('id_pagina')
+        titulo = request.POST.get('titulo_pagina')
+        Pagina.objects.filter(id=id_pagina).update(titulo=titulo)
+
+        return redirect('edit_paginas_conf')
+@require_POST
+def delete_pg_conf(request):
+    if request.method == 'POST':
+        id_pagina = request.POST.get('id_pagina')
+        pagina = get_object_or_404(Pagina, id=id_pagina)
+        pagina.delete()
+        return redirect('edit_paginas_conf')
+
 
 
 @require_POST
@@ -172,6 +215,9 @@ def excluir_pagina(request, pagina_id):
     pagina = get_object_or_404(Pagina, id=pagina_id)
     pagina.delete()
     return JsonResponse({'mensagem': 'Pagina excluida com sucesso'})
+
+
+# ------------------ ARE DE CONFIGURAÇÃO ------------------
 
 
 # ----------- area de cards -----------------------
@@ -193,11 +239,13 @@ def add_cards(request):
 @require_POST
 def delete_card(request):
     if request.method == 'POST':
-        card_id = request.POST.get('card_id')
-        pagina_id = request.POST.get('pagina_id')
+        card_id = request.POST.get('id_card')
+        pagina_id = request.POST.get('id_pagina_do_card')
         card = get_object_or_404(Cards, id=card_id)
+        print(pagina_id)
         card.delete()
         return redirect('paginas', pagina_id=pagina_id)
+    
 
 
 @login_required
@@ -273,8 +321,8 @@ def simulado(request, id_pagina):
 
     user_atual = request.user.username
     usuario_atual = Usuario.objects.get(arroba=user_atual)
+
     pagina_principal = usuario_atual.paginas.all().first()
-    todas_paginas = usuario_atual.paginas.all().first()
     paginas_compartilhadas = usuario_atual.paginas_compartilhadas.all()
     paginas_cards2 = Pagina.objects.filter(
         cards__isnull=False, usuarios=usuario_atual).distinct()
@@ -282,7 +330,7 @@ def simulado(request, id_pagina):
         simulado__isnull=False).distinct()
 
     contexto = {'tipo_user': usuario_atual.tipo_user,
-                'pagina_princiapal': pagina_principal,
+                'pagina_principal': pagina_principal,
                 'pg': paginas_cards2,
                 'paginass': id_pagina,
                 'paginas_simulados': paginas_com_simulados,
@@ -319,11 +367,17 @@ def questao_simulado(request):
 @require_POST
 def add_pagina_simulado(request):
     if request.method == 'POST':
-        titulo = request.POST.get('titulo_pagina_simulado')
+        titulo = request.POST.get('titulo_pagina')
+        pergunta_simulado = request.POST.get('pergunta_simulado')
+        alternativa_a = request.POST.get('alternativa_a_simulado')
+        alternativa_b = request.POST.get('alternativa_b_simulado')
+        alternativa_c = request.POST.get('alternativa_c_simulado')
+        alternativa_d = request.POST.get('alternativa_d_simulado')
+        alternativa_correta = request.POST.get('alternativa_correta')
         nova_pagina = Pagina.objects.create(titulo=titulo)
-        Simulados.objects.create(pergunta=titulo, alternativa_a=titulo,
-                                 alternativa_b=titulo, alternativa_c=titulo,
-                                 alternativa_d=titulo, correta=titulo, pagina=nova_pagina)
+        Simulados.objects.create(pergunta=pergunta_simulado, alternativa_a=alternativa_a,
+                                 alternativa_b=alternativa_b, alternativa_c=alternativa_c,
+                                 alternativa_d=alternativa_d, correta=alternativa_correta, pagina=nova_pagina)
         usuario_atual = request.user.username
         usuario = Usuario.objects.get(arroba=usuario_atual)
         usuario.paginas.add(nova_pagina)
@@ -336,7 +390,34 @@ def add_pagina_simulado(request):
 @login_required
 def checa_resposta_simulado(request):
     if request.method == 'POST':
-       pass
+        usuario = request.user.username
+        usuario_ = Usuario.objects.get(arroba=usuario)
+        id_pagina = request.POST.get('id_pagina')
+        pagina = get_object_or_404(Pagina, id=id_pagina)
+        estatisticas = EstatisticasSimulado.objects.create(
+            usuario=usuario_, pagina=pagina)
+        questoes = Simulados.objects.filter(pagina_id=id_pagina)
+        acertos = 0
+        erros = 0
+        for questao in questoes:
+            alternativa_correta_marcada = request.POST.get(
+                f'alternativas_{questao.id}')
+            if alternativa_correta_marcada and alternativa_correta_marcada == questao.correta:
+                estatisticas.questoes_corretas.add(questao)
+                acertos += 1
+            else:
+                estatisticas.questoes_erradas.add(questao)
+                erros += 1
+        if acertos == len(questoes):
+            messages.success(
+                request, f'Parabéns! Você acertou todas as {acertos + erros} questões. De {acertos + erros} questões')
+        else:
+            messages.error(
+                request, f'Você acertou {acertos} questões e errou {erros}. De {acertos + erros} questões')
+
+        # jogar para uma outra pagina de sucesso.
+        return redirect('simulado', id_pagina)
+
 
 @require_POST
 @login_required
@@ -346,7 +427,7 @@ def delete_simulado(request):
         id_pagina = request.POST.get('id_pagina')
         simulado = get_object_or_404(Simulados, id=id_questao)
         simulado.delete()
-        return redirect('simulado', id_pagina) 
+        return redirect('simulado', id_pagina)
 
 
 @login_required
@@ -361,14 +442,22 @@ def edit_simulado(request):
         alternativa_correta = request.POST.get('alternativa_correta')
         id_pagina = request.POST.get('id_pagina')
         id_questao = request.POST.get('id_questao')
-
-        Simulados.objects.filter(id=id_questao).update(pergunta=pergunta_simulado,
-                                                       alternativa_a=alternativa_a,
-                                                       alternativa_b=alternativa_b,
-                                                       alternativa_c=alternativa_c,
-                                                       alternativa_d=alternativa_d,
-                                                       correta=alternativa_correta)
-
+        if not (alternativa_correta) or (alternativa_a or alternativa_b):
+            messages.error(
+                request, 'É necessario adicionar uma resposta correta ou preecher todos os campos.')
+            return redirect('simulado', id_pagina)
+        else:
+            Simulados.objects.filter(id=id_questao).update(pergunta=pergunta_simulado,
+                                                           alternativa_a=alternativa_a,
+                                                           alternativa_b=alternativa_b,
+                                                           alternativa_c=alternativa_c,
+                                                           alternativa_d=alternativa_d,
+                                                           correta=alternativa_correta)
+            messages.success(
+                request, 'Questão atualizada')
         return redirect('simulado', id_pagina)
 
 # -------------------------- FIM AREA DOS SIMULADOS --------------------------------
+
+def dash_estatistica(request):
+    return render(request, 'charts.html')

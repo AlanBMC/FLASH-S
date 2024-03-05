@@ -56,47 +56,59 @@
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
-                        <span>General</span>
+                        <span>Minhas paginas</span>
                     </li>
                     <li class="sidebar-dropdown">
                         <a href="#">
                             <i class="fa-solid fa-file-lines"></i>
-                            <span>Editar cards</span>
+                            <span>Flash's card's</span>
 
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
+
+
                                 <li>
-                                    <button class="add-page" onclick="adicionarPagina2()">+</button>
+                                    <a href=" {% url 'paginas' paginas.id %}">
+                                        {{paginas.titulo}}
+                                    </a>
                                 </li>
                                 {%for pgs in pg_titulos %}
                                 <li>
-                                    <a href="/user/paginas/{{pgs.id}}/">
+                                    <a href="{% url 'paginas' pgs.id %}">
                                         {{pgs.titulo}}
                                     </a>
                                 </li>
                                 {% endfor %}
 
-                                <!-- colocar edit e delete aqui.-->
                             </ul>
                         </div>
                     </li>
                     <li class="sidebar-dropdown">
+
                         <a href="#">
-                            <i class="fa fa-book"></i>
-                            <span>Questões</span>
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span>Meus Simulados</span>
 
                         </a>
+                        <div class="sidebar-submenu">
+                            <ul>
 
+                                {%for pg_simulados in paginas_simulados %}
+                                <li>
+                                    <a href="{% url 'simulado' pg_simulados.id %}">
+                                        {{pg_simulados.titulo}}
+                                    </a>
+                                </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
                     </li>
-                    <li class="sidebar-dropdown">
-                        <a href="{% url 'edit_paginas_conf' %}">
-                            <i class="fa-solid fa-image"></i>
-                            <span>Editar Paginas</span>
-                        </a>
 
 
-                    </li>
+
+
 
 
 
@@ -145,30 +157,75 @@
     <main class="page-content">
 
 
+        <div style=" position: relative; left: 20%; margin: 10px;">
 
+            <h1 style="left: 30%;"> Editar paginas de Flash's Cards </h1>
+        </div>
+        {%for pgs in pg_titulos %}
+        {%if pgs.titulo != 'Home'%}
+        <div class="mb-3">
+            <label type="text" class="form-control" name="titulo_da_pagina_edit_conf" style="margin: 10px;"
+                placeholder="{{pgs.titulo}}"> {{pgs.titulo}}</label>
+            <button class="btn btn-secondary" type="submit" id="botao_edit_pg"
+                onclick="edit_nome_pg('{{pgs.titulo}}', '{{pgs.id}}')">Editar</button>
 
+            <button class="btn btn-danger" id="botao_edit_pg"
+                onclick="delete_pg('{{pgs.id}}', '{{pgs.titulo}}')">Delete</button>
+        </div>
+        {%endif%}
+        {%endfor%}
+        <div style=" position: relative; left: 20%; margin: 10px;">
+            <h1 style="left: 30%;"> Editar paginas de Simulados </h1>
+        </div>
+        {%for pgs in paginas_simulados %}
 
+        <div class="mb-3">
+            <label type="text" class="form-control" name="titulo_da_pagina_edit_conf" style="margin: 10px;"
+                placeholder="{{pgs.titulo}}"> {{pgs.titulo}}</label>
+            <button class="btn btn-secondary" type="submit" id="botao_edit_pg"
+                onclick="edit_nome_pg('{{pgs.titulo}}', '{{pgs.id}}')">Editar</button>
 
+            <button class="btn btn-danger" id="botao_edit_pg"
+                onclick="delete_pg('{{pgs.id}}', '{{pgs.titulo}}')">Delete</button>
+        </div>
 
-        <form action="">
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">@Arroba</label>
-                <input type="text" class="form-control" id="" placeholder="{{usuario.arroba}}">
+        {%endfor%}
+        <!------------ PARTE DE DELETE DA PAGINA ------------->
+
+        <div id="modal_delete_pg" style="display: none; top: 50%;">
+            <div
+                style="position: absolute; justify-items: center; top: 35%; left: 40%; width: 500px; max-width: 60%; background-color: bisque; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+                <form action="{% url 'delete_pg_conf' %}" method="POST"> {% csrf_token %}
+                    <input type="hidden" id="id_pagina_delete" name="id_pagina">
+
+                    <h3>Tem certeza que deseja excluir a pagina?</h3>
+
+                    <p>Todas as informações seram perdidas</p>
+                    <button type="button" onclick="delete_pg_fechar_model()" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" onclick="delete_pg_fechar_model()" class="btn btn-danger">Excluir</button>
+                </form>
             </div>
+        </div>
 
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">senha</label>
-                <input type="password" class="form-control" id="senha1" placeholder="Senha">
+        <!------------ FIM PARTE DE DELETE DA PAGINA ------------->
+
+
+        <!------------ PARTE DE EDIT TITULO DA PAGINA ------------->
+        <div id="modal_edit_titulo_pg" style="display: none; top: 50%;">
+            <div
+                style="position: absolute; justify-items: center; top: 35%; left: 40%; width: 500px; max-width: 60%; background-color: bisque; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+                <form action="{% url 'edit_titulo_pag_conf' %}" method="POST"> {% csrf_token %}
+                    <input type="hidden" id="id_pagina_edit" name="id_pagina">
+                    <h4>Alterar nome da pagina:</h4>
+                    <input style="margin: 10px;" type="text" placeholder="" name="titulo_pagina" id="titulo_pagina">
+
+                    <button type="button" onclick="fecha_modal_edit_pg()" class="btn btn-warning">Cancelar</button>
+                    <button type="submit" onclick="fecha_modal_edit_pg()" class="btn btn-success">Alterar</button>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Confirma senha</label>
-                <input type="password" class="form-control" id="senha2" placeholder="Confirma senha">
-            </div>
+        </div>
+        <!------------FIM PARTE DE EDIT TITULO DA PAGINA ------------->
 
-            <button type="submit" class="btn btn-success">Enviar</button>
-
-            <button type="reset" class="btn btn-primary">Limpar</button>
-        </form>
 
     </main>
     {% endblock %}

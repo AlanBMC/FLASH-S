@@ -809,3 +809,36 @@ textarea:focus {
         gap: 1.2em;
     }
 }
+
+.alert-messages {
+    margin-top: 20px;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+    /* Verde */
+}
+
+.alert-error,
+.alert-danger {
+    background-color: #f44336;
+    /* Vermelho */
+}
+
+.alert-info {
+    background-color: #2196F3;
+    /* Azul */
+}
+
+.alert-warning {
+    background-color: #ff9800;
+    /* Laranja */
+}
+
