@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_django
 from django.db import IntegrityError
-from .models import Usuario, Pagina, Cards, Simulados, EstatisticasSimulado
+from .models import Usuario, Pagina, Cards, Simulados, EstatisticasSimulado, EnemRespostas, EstatisticasEnem_usuario
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -17,7 +17,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import requests
+import google.generativeai as genai
 # Create your views here.
 
 
@@ -97,6 +98,7 @@ def paginas(request, pagina_id):
                     'pagina_principal': pagina_principal,
                     'paginas_simulado': paginas_com_simulados,
                     'tipo_user': usuario.tipo_user,
+                    'paginass': pagina_id,
                     'paginas_compartilhadas': paginas_compartilhadas,
                     'foto_perfil': usuario.foto_perfil.url}
 
@@ -182,13 +184,13 @@ def edit_paginas_conf(request):
     paginas_com_simulados = Pagina.objects.filter(
         simulado__isnull=False).distinct()
 
-
     contexto = {'paginas': pagina,
                 'pg_titulos': PG, 'tipo_user': usuario_atual.tipo_user,
                 'foto_perfil': usuario_atual.foto_perfil.url,
                 'usuario': usuario_atual,
                 'paginas_simulados': paginas_com_simulados}
     return render(request, 'edit_paginas.html', contexto)
+
 
 def edit_titulo_pag_conf(request):
     if request.method == 'POST':
@@ -197,6 +199,8 @@ def edit_titulo_pag_conf(request):
         Pagina.objects.filter(id=id_pagina).update(titulo=titulo)
 
         return redirect('edit_paginas_conf')
+
+
 @require_POST
 def delete_pg_conf(request):
     if request.method == 'POST':
@@ -204,7 +208,6 @@ def delete_pg_conf(request):
         pagina = get_object_or_404(Pagina, id=id_pagina)
         pagina.delete()
         return redirect('edit_paginas_conf')
-
 
 
 @require_POST
@@ -245,7 +248,6 @@ def delete_card(request):
         print(pagina_id)
         card.delete()
         return redirect('paginas', pagina_id=pagina_id)
-    
 
 
 @login_required
@@ -457,7 +459,132 @@ def edit_simulado(request):
                 request, 'Questão atualizada')
         return redirect('simulado', id_pagina)
 
+
+def sol(request):
+    if request.method == 'POST':
+        id_pagina = request.POST.get('id_pagina')
+        dificuldade = request.POST.get('dificuldade_questao')
+        categoria = request.POST.get('categoria_questao')
+
+        print(dificuldade, categoria)
+        # pergunta_respostas = obter_e_traduzir_perguntas(dificuldade, categoria)
+        return redirect('simulado', id_pagina)
 # -------------------------- FIM AREA DOS SIMULADOS --------------------------------
 
-def dash_estatistica(request):
-    return render(request, 'charts.html')
+
+# ---------------- funções API e IA -------------------------
+def genai_configurar():
+    genai.configure(api_key="AIzaSyC_-yuJYc59iZFcC91YpEdJvjMtbM4d2wE")
+    model = genai.GenerativeModel('gemini-pro')
+    return model
+
+# Função para traduzir texto usando a API generativa fictícia
+
+
+def traduzir_texto(model, texto):
+    prompt_traduzir = f'Traduza: {texto}'
+    response = model.generate_content(prompt_traduzir)
+    return response.text
+
+
+def obter_e_traduzir_perguntas(dificuldade, categoria):
+    url = f"https://opentdb.com/api.php?amount=1&category={categoria}&difficulty={dificuldade}&type=multiple"
+
+    response = requests.get(url)
+    data = response.json()
+    model = genai_configurar()
+    indice = ['a', 'b', 'c', 'd']
+    perguntasList = []
+    respostaList = []
+    pergunta_resposta = ''
+    if data['response_code'] == 0:
+        for i, question in enumerate(data['results'], start=1):
+            perguntasList.append(question['question'])
+
+            respostaList.append(
+                question['incorrect_answers'] + [question['correct_answer']])
+            pergunta_resposta = perguntasList[0]
+        # Aqui, assumimos que você quer a primeira lista de respostas
+        for i, respostas in enumerate(respostaList[0]):
+            # Adiciona cada resposta na string, com a letra correspondente (a-d)
+            pergunta_resposta += f'\n{["a", "b", "c", "d"][i]}) {respostas}'
+        pergunta_resposta += f'\nResposta correta: {respostaList[0][-1]}'
+
+    texto_traduzido = traduzir_texto(model, pergunta_resposta)
+    return texto_traduzido
+
+
+# criar funçoes para o pdf dos enem's
+def enem(request, enem_d):
+
+    ano = str(enem_d)[:4]
+    dia = str(enem_d)[-1]
+    ano = int(ano)
+    dia = int(dia)
+
+    conteudo = contexto(request, enem_d, dia, ano)
+
+    return render(request, 'enem.html', conteudo)
+
+
+def contexto(request, enem_d, dia, ano):
+    user_atual = request.user.username
+    usuario_atual = Usuario.objects.get(arroba=user_atual)
+    pagina_principal = usuario_atual.paginas.all().first()
+    paginas_compartilhadas = usuario_atual.paginas_compartilhadas.all()
+    paginas_cards2 = Pagina.objects.filter(
+        cards__isnull=False, usuarios=usuario_atual).distinct()
+    paginas_com_simulados = Pagina.objects.filter(
+        simulado__isnull=False).distinct()
+    numeros_1_a_90 = list(range(1, 91))
+    numeros_91_a_181 = list(range(91, 182))
+
+    contexto = {'tipo_user': usuario_atual.tipo_user,
+                'pagina_principal': pagina_principal,
+                'paginas': pagina_principal,
+                'pg': paginas_cards2,
+                'enem_dia': enem_d,
+                'dia': dia,
+                'ano': ano,
+                'numero': numeros_1_a_90,
+                'numero2': numeros_91_a_181,
+                'paginas_simulados': paginas_com_simulados,
+                'paginas_compartilhadas': paginas_compartilhadas,
+                'foto_perfil': usuario_atual.foto_perfil.url}
+    return contexto
+
+
+def resposta_enem(request):
+    if request.method == 'POST':
+        dia = request.POST.get('dia')
+        ano = request.POST.get('ano')
+        enem_d = f'{ano}' + f'{dia}'
+        print(enem_d)
+        respostas = {}
+        idioma = ''
+        if dia == '1':
+            idioma = request.POST.get('idioma')
+            print('idioma: ', idioma)
+            for i in range(1, 90):
+                resposta = request.POST.get(f'resposta{i}')
+                respostas[f'{i}'] = resposta
+
+        print(respostas, idioma)
+        verifica_resposta(request, respostas, ano, dia, idioma)
+        return redirect('enem', enem_d)
+
+
+def verifica_resposta(request, resposta_usuario, ano, dia, idioma):
+    resposta = EnemRespostas.objects.filter(ano=ano, dia=dia)
+    
+
+    corretas = 0
+    erradas = 0
+    for checa in resposta:
+        numero_q = checa.numero_questao
+        resposta_u = resposta_usuario.get(str(numero_q))
+        if resposta_u and checa.resposta == resposta_u:
+            corretas += 1
+        else:
+            erradas += 1
+    print(erradas-5, corretas)

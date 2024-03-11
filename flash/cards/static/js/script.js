@@ -326,3 +326,15 @@ function delete_card_fecha_modal(){
     modal_delete_card.style.display = 'none'
 }
 // ------ fim delete card 
+
+// --------- modal sol
+function solAbre(){
+    console.log('sol abrindo')
+    var modalS = document.getElementById('modalSol')
+    modalS.style.display = 'block'
+}
+
+function solFecha(){
+    var modalS = document.getElementById('modalSol')
+    modalS.style.display = "none"
+}

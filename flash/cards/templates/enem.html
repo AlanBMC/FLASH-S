@@ -1,0 +1,321 @@
+{%extends 'base.html' %}
+{% load static %}
+
+{% block perfil %}
+<!-- MENU INICIO FZER ELE DE BASE -->
+
+<div class="page-wrapper chiller-theme toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <div class="sidebar-brand">
+                <a href="{% url 'paginas' paginas.id %}">flashs</a>
+                <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="sidebar-header">
+                <div class="user-pic">
+                    <img src="{{  foto_perfil }}" width="30" height="40" alt="User picture" />
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+
+                        <strong>
+                            <a href="{% url 'paginas' paginas.id %}" style="text-decoration: none; color: inherit;">
+
+                                {{request.user.username}}
+                            </a>
+                        </strong>
+                    </span>
+                    <!-- -editar:  precisa?-->
+                    <span class="user-role">{{tipo_user}}</span>
+                    <span class="user-status">
+                        <i class="fa fa-circle"></i>
+                        <!-- -editar: para outros tipos de status -->
+                        <span>Online</span>
+                    </span>
+                </div>
+            </div>
+            <!-- sidebar-header  -->
+            <div class="sidebar-search">
+                <div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-menu" placeholder="Search..." />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar-search  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Minhas paginas</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-tachometer-alt"></i>
+                            <span>Meus Cards</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <button class="add-page" onclick="adicionarPagina2()">+</button>
+                                </li>
+                                <li>
+                                    <a href="{% url 'paginas' pagina_principal.id %}">
+                                        {{pagina_principal.titulo}}
+
+                                    </a>
+
+                                </li>
+                                {% for paginas_cards in paginas_com_card %}
+                                <li>
+                                    <a href="{% url 'paginas' paginas_cards.id %}">
+                                        {{paginas_cards.titulo}}
+                                    </a>
+                                </li>
+                                {%empty%}
+                                <li> <a href="">Sem paginas</a></li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="far fa-gem"></i>
+                            <span>Meus Simulados</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+
+                                <button class="add-page" onclick="adicionar_pergunta()">+</button>
+
+
+                                {% for pg in paginas_simulado %}
+                                <li>
+                                    <a href="{% url 'simulado' pg.id %}">
+                                        {{pg.titulo}}
+                                    </a>
+
+                                </li>
+
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="header-menu">
+                        <span>Tarefas dos Professores</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Cards dos Prof's</span>
+
+
+                            <span class="badge badge-pill badge-danger">{{ paginas_compartilhadas.count }}</span>
+
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                {%for pgs_compartilhadas in paginas_compartilhadas %}
+                                <li>
+                                    <a href="{% url 'paginas_compartilhadas' pgs_compartilhadas.id %}">
+                                        {{pgs_compartilhadas.titulo}}
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li><a>Sem páginas</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Simulados dos Prof's</span>
+                            <!--<span class="badge badge-pill badge-danger">{{ simulados_compartilhados.count }}</span>-->
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+
+                            </ul>
+                        </div>
+                    </li>
+
+
+                    </li>
+                    <li class="header-menu">
+                        <span>ENEM - SIMULADÃO</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>ANO'S</span>
+                            <!--<span class="badge badge-pill badge-danger">{{ simulados_compartilhados.count }}</span>-->
+                        </a>
+                        <div class="sidebar-submenu">
+
+
+                            <ul>
+                                <li>
+                                    <a href="{%url 'enem' 20231 %}">Enem 2023- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20232 %}">Enem 2023- dia 2</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20221 %}">Enem 2022- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20222 %}">Enem 2022- dia 2</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20211 %}">Enem 2021- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20212 %}">Enem 2021- dia 2</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+            <a href="#">
+                <i class="fa-solid fa-user-tie"></i>
+                <span class="badge badge-pill badge-warning notification"></span>
+            </a>
+            <a href="#">
+                <i class="fa fa-envelope"></i>
+                <span class="badge badge-pill badge-success notification">7</span>
+            </a>
+            <a href="{% url 'configurar' %}">
+                <i class="fa fa-cog"></i>
+                <span class="badge-sonar"></span>
+            </a>
+            <a href="{% url 'logout' %}">
+
+                <form action="{% url 'logout' %}" method="POST">{% csrf_token %}
+                    <i>
+                        <button type="submit" class="fa fa-power-off sair" style="
+                       background-color: rgba(157, 156, 156, 0);
+                        color: rgb(133, 165, 165);
+
+                       "></button>
+
+                    </i>
+                </form>
+            </a>
+
+        </div>
+        <!-- pega o ID da pagina e no javascritp faz os procedimentos para adicionar o card a pagina correta. -->
+
+        <div id="pagina-data" data-pagina-id="{{ paginas.id }}"></div>
+
+    </nav>
+
+    {% endblock %}
+
+    {%block enem%}
+    <div class="row g-0">
+
+
+        <div style="height: 609px; width: 70%;" lass="col-sm-5 col-md-7">
+
+
+            <embed src="{% static 'pdf_enem/ENEM_' %}{{ enem_dia }}.pdf" type="application/pdf" width="100%"
+                height="100%">
+
+        </div>
+
+        <div class="col-7 col-md-5" style="margin-left: 78%; padding: 20px; padding-left: 0; margin-top: -600px;">
+            <p> Marque as opções correta </p>
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                aria-controls="offcanvasRight">PREENCHER</button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">MARQUE</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <!-- aqui fica as questões-->
+                <div class="offcanvas-body">
+                    <form action="{% url 'resposta_enem' %}" method="POST"> {% csrf_token %}
+                        <p>Marque as alternativas </p>
+                        <input type="hidden" name="dia" value="{{dia}}">
+                        <input type="hidden" name="ano" value="{{ano}}">
+
+
+                        {%if dia == 1 %}
+
+                        <p> Escolha seu idioma </p>
+                        <label for="">Ingles</label>
+                        <input type="radio" name="idioma" value="ingles"><br>
+                        <label for="">Espanhol</label>
+                        <input type="radio" name="idioma" value="espanhol">
+                        <div class="row g-0">
+
+                        
+                            {% for i in numero %}
+                            <div class="col-7">
+                                <p> Questão {{ i }}</p>
+                                <label for="">A</label>
+                                <input type="radio" name="resposta{{ i }}" value="A">
+                                <label for="">B</label>
+                                <input type="radio" name="resposta{{ i }}" value="B">
+                                <label for="">C</label>
+                                <input type="radio" name="resposta{{ i }}" value="C">
+                                <label for="">D</label>
+                                <input type="radio" name="resposta{{ i }}" value="D">
+                                <label for="">E</label>
+                                <input type="radio" name="resposta{{ i }}" value="E">
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            {% for i in numero2 %}
+                            <div class="col-7">
+                                <p>Questão {{ i }}</p>
+                                <label for="">A</label>
+                                <input type="radio" name="resposta{{ i }}" value="A">
+                                <label for="">B</label>
+                                <input type="radio" name="resposta{{ i }}" value="B">
+                                <label for="">C</label>
+                                <input type="radio" name="resposta{{ i }}" value="C">
+                                <label for="">D</label>
+                                <input type="radio" name="resposta{{ i }}" value="D">
+                                <label for="">E</label>
+                                <input type="radio" name="resposta{{ i }}" value="E">
+                            </div>
+                            {% endfor %}
+                            {%endif %}
+
+
+                            <button type="submit" class="btn btn-primary"> ENVIAR </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endblock%}
+
+    {% block script %}
+    <script src="{% static 'js/script.js'%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {%endblock%}

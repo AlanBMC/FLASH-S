@@ -31,5 +31,9 @@ urlpatterns = [
     path('edit_paginas_conf/', views.edit_paginas_conf, name='edit_paginas_conf'),
     path('edit_titulo_pag_conf/', views.edit_titulo_pag_conf, name='edit_titulo_pag_conf'),
     path('delete_pg_conf/', views.delete_pg_conf, name='delete_pg_conf'),
-    path('dash_estatistica/', views.dash_estatistica, name='dash_estatistica')
+    path('sol/', views.sol, name='sol'),
+
+    #area dos enem's
+    path('enem/<int:enem_d>', views.enem, name='enem'),
+    path('resposta_enem/', views.resposta_enem, name='resposta_enem')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

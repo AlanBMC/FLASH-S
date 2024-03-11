@@ -37,12 +37,6 @@
             <div class="sidebar-search">
                 <div>
                     <div class="input-group">
-                        <input type="text" class="form-control search-menu" placeholder="Search..." />
-                        <div class="input-group-append">
-                            <span class="input-group-text">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +59,7 @@
                                 <li>
                                     <a href="{% url 'paginas' pagina_principal.id %}">
                                         {{pagina_principal.titulo}}
-                                       
+
                                     </a>
 
                                 </li>
@@ -76,7 +70,7 @@
                                     </a>
                                 </li>
                                 {% endfor %}
-                               
+
 
                             </ul>
                         </div>
@@ -89,8 +83,8 @@
                         <div class="sidebar-submenu">
                             <ul>
 
-                                    <button class="add-page" onclick="abre_modal_simulados()" >+</button>
-                                
+                                <button class="add-page" onclick="abre_modal_simulados()">+</button>
+
                                 {% for paginas in paginas_simulados %}
                                 <li>
                                     <a href="{% url 'simulado' paginas.id %}">
@@ -101,7 +95,7 @@
                                 {% empty %}
                                 <li><a>Sem páginas</a></li>
                                 {%endfor%}
-                               
+
                             </ul>
                         </div>
                     </li>
@@ -149,8 +143,8 @@
         <!-- sidebar-content  -->
         <div class="sidebar-footer">
             <a href="#">
-                <i class="fa fa-bell"></i>
-                <span class="badge badge-pill badge-warning notification">3</span>
+                <i class="fa-solid fa-user-tie"></i>
+                <span class="badge badge-pill badge-warning notification"></span>
             </a>
             <a href="#">
                 <i class="fa fa-envelope"></i>
@@ -181,19 +175,20 @@
     {%block simulado %}
 
     <!-- AREA DE ADD DOS SIMULADOS -->
-
+    
     <button type="button" style="margin: 10px; margin-left: 90%; margin-top: 3%;" class="btn btn-primary botao_modal"
-        data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">+</button>
+    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">+</button>
+    
+    <button type="button" style="background-color: #3a3f48; margin: 20px; margin-left: 20%; color: #fff;" onclick="solAbre()">SOL - Gerar Questões</button>
 
-        {% if messages %}
-        <div style="justify-items: center;" class="alert-messages">
-            {% for message in messages %}
-            <div
-            class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" style="text-align: center;">
+    {% if messages %}
+    <div style="justify-items: center;" class="alert-messages">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" style="text-align: center;">
             {{ message }}
         </div>
         {% endfor %}
-        
+
     </div>
     {% endif %}
     <!-- AREA DE ADD DOS DOS SIMULADOS -->
@@ -207,11 +202,11 @@
             </div>
 
 
-  
+
             <form action="{% url 'checa_resposta' %}" method="POST"> {% csrf_token %}
                 {% for pagina in paginas_simulados %}
                 {% for simulado in pagina.simulado.all %}
-                
+
 
                 {%if simulado.pagina.id == paginass %}
 
@@ -299,6 +294,74 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
     </div>
+
+
+
+
+    <!-------------- MODAL SOL-IA --------------------->
+
+
+    <div id="modalSol" style="display: none; top: 40%;">
+        <div
+            style="position: absolute; justify-items: center; top: 20%; left: 34%; width: 500px; max-width: 60%; background-color: rgb(236, 161, 71); padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+            <form action="{% url 'sol' %}" method="POST"> {% csrf_token%}
+               
+                <p
+                    style="background-color: red; padding: 5px; width: 55px; border-radius: 10px; margin-bottom: 30px; margin-top: -20px;">
+                    [BETA]</p>
+                <h4> Selecione a categoria </h4>
+                <ul class="list-unstyled">
+                    <li>
+                        <input type="radio" id="alternativa1" name="categoria_questao" value="23">
+                        <label for="alternativa1">Historia</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa2" name="categoria_questao" value="22">
+                        <label for="alternativa2">Geografia</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa3" name="categoria_questao" value="17">
+                        <label for="alternativa3">Ciencias das natures</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa3" name="categoria_questao" value="18">
+                        <label for="alternativa3">Ciencias e tecnologia</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa3" name="categoria_questao" value="19">
+                        <label for="alternativa3">Ciencias Exatas</label>
+                    </li>
+                </ul>
+
+
+                <h4> Dificuldade </h4>
+                <ul class="list-unstyled">
+                    <li>
+                        <input type="radio" id="alternativa1" name="dificuldade_questao" value="easy">
+                        <label for="alternativa1">Facil</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa2" name="dificuldade_questao" value="medium">
+                        <label for="alternativa2">Medio</label>
+                    </li>
+                    <li>
+                        <input type="radio" id="alternativa3" name="dificuldade_questao" value="hard">
+                        <label for="alternativa3">Dificil</label>
+                    </li>
+                </ul>
+
+                <input type="hidden" name="id_pagina" value="{{paginass}}">
+
+                <button type="button" onclick="solFecha()" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" onclick="solFecha()" class="btn btn-danger">Selecionar</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-------------- FIM MODAL SOL-IA --------------------->
+
 
 
 
@@ -401,7 +464,7 @@
 
                     <div class="mb-2">
                         <label for="message-text" class="col-form-label">De um topico a pagina:</label>
-                        <textarea class="form-control" name="titulo_pagina" ></textarea>
+                        <textarea class="form-control" name="titulo_pagina"></textarea>
                     </div>
                     <div class="mb-2">
                         <label for="message-text" class="col-form-label">Pergunta:</label>

@@ -82,7 +82,7 @@
                                     </a>
                                 </li>
                                 {%empty%}
-                                    <li> <a href="">Sem paginas</a></li>
+                                <li> <a href="">Sem paginas</a></li>
                                 {% endfor %}
 
                             </ul>
@@ -96,18 +96,18 @@
                         <div class="sidebar-submenu">
                             <ul>
 
-                                    <button class="add-page" onclick="adicionar_pergunta()" >+</button>
-                                
+                                <button class="add-page" onclick="adicionar_pergunta()">+</button>
+
 
                                 {% for pg in paginas_simulado %}
                                 <li>
                                     <a href="{% url 'simulado' pg.id %}">
                                         {{pg.titulo}}
                                     </a>
-                                  
+
                                 </li>
-                            
-                                {% endfor  %}
+
+                                {% endfor %}
 
                             </ul>
                         </div>
@@ -119,10 +119,10 @@
                         <a href="#">
                             <i class="fa fa-book"></i>
                             <span>Cards dos Prof's</span>
-                            
-                            
+
+
                             <span class="badge badge-pill badge-danger">{{ paginas_compartilhadas.count }}</span>
-                          
+
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
@@ -137,20 +137,55 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <li class="sidebar-dropdown">
-                            <a href="#">
-                                <i class="fa fa-book"></i>
-                                <span>Simulados dos Prof's</span>
-                                <!--<span class="badge badge-pill badge-danger">{{ simulados_compartilhados.count }}</span>-->
-                            </a>
-                            <div class="sidebar-submenu">
-                                <ul>
-    
-                                </ul>
-                            </div>
-                        </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Simulados dos Prof's</span>
+                            <!--<span class="badge badge-pill badge-danger">{{ simulados_compartilhados.count }}</span>-->
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+
+                            </ul>
+                        </div>
+                    </li>
 
 
+                    </li>
+                    <li class="header-menu">
+                        <span>ENEM - SIMULADÃO</span>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>ANO'S</span>
+                            <!--<span class="badge badge-pill badge-danger">{{ simulados_compartilhados.count }}</span>-->
+                        </a>
+                        <div class="sidebar-submenu">
+
+
+                            <ul>
+                                <li>
+                                    <a href="{%url 'enem' 20231 %}">Enem 2023- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20232 %}">Enem 2023- dia 2</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20221 %}">Enem 2022- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20222 %}">Enem 2022- dia 2</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20211 %}">Enem 2021- dia 1</a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'enem' 20212 %}">Enem 2021- dia 2</a>
+                                </li>
+                            </ul>
+
+                        </div>
                     </li>
 
                 </ul>
@@ -160,8 +195,8 @@
         <!-- sidebar-content  -->
         <div class="sidebar-footer">
             <a href="#">
-                <i class="fa fa-bell"></i>
-                <span class="badge badge-pill badge-warning notification">3</span>
+                <i class="fa-solid fa-user-tie"></i>
+                <span class="badge badge-pill badge-warning notification"></span>
             </a>
             <a href="#">
                 <i class="fa fa-envelope"></i>
@@ -214,75 +249,76 @@
 
         <!--questao e resposta-->
 
-<!------------------------- MODAL PARA adicionar pergunta --------------------------->
+        <!------------------------- MODAL PARA adicionar pergunta --------------------------->
 
-<div id="modal_add_pergunta_simulado"
-style="display: none; position:relative; top: -100px;  left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
-<div
-    style="position: absolute;   left: 30%;  width: 400px; max-width: 100%; background-color: rgba(183, 183, 183, 0.538); padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+        <div id="modal_add_pergunta_simulado"
+            style="display: none; position:relative; top: -100px;  left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 999;">
+            <div
+                style="position: absolute;   left: 30%;  width: 400px; max-width: 100%; background-color: rgba(183, 183, 183, 0.538); padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
 
-    <div>
-        <form action="{% url  'add_pagina_simulado' %}" method="POST"> {% csrf_token %}
+                <div>
+                    <form action="{% url  'add_pagina_simulado' %}" method="POST"> {% csrf_token %}
 
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">De um topico a pagina:</label>
-                <textarea class="form-control" name="titulo_pagina" ></textarea>
-            </div>
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">Pergunta:</label>
-                <textarea class="form-control" name="pergunta_simulado" id="pergunta"></textarea>
-            </div>
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">Alternativa A):</label>
-                <textarea class="form-control" name="alternativa_a_simulado" id="alternativaA"></textarea>
-            </div>
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">Alternativa B):</label>
-                <textarea class="form-control" name="alternativa_b_simulado" id="alternativaB"></textarea>
-            </div>
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">Alternativa C):</label>
-                <textarea class="form-control" name="alternativa_c_simulado" id="alternativaC"></textarea>
-            </div>
-            <div class="mb-2">
-                <label for="message-text" class="col-form-label">Alternativa D):</label>
-                <textarea class="form-control" name="alternativa_d_simulado" id="alternativaD"></textarea>
-            </div>
-            <div class="mb-1">
-                <label for="message-text" class="col-form-label">resposta correta</label>
-                <ul class="list-unstyled">
-                    <li>
-                        <input type="radio" id="alternativa1" name="alternativa_correta" value="A">
-                        <label for="alternativa1">A</label>
-                    </li>
-                    <li>
-                        <input type="radio" id="alternativa2" name="alternativa_correta" value="B">
-                        <label for="alternativa2">B</label>
-                    </li>
-                    <li>
-                        <input type="radio" id="alternativa3" name="alternativa_correta" value="C">
-                        <label for="alternativa3">C</label>
-                    </li>
-                    <li>
-                        <input type="radio" id="alternativa4" name="alternativa_correta" value="D">
-                        <label for="alternativa4">D</label>
-                    </li>
-                </ul>
-            </div>
-            <div style="position: relative; left: 35%; width: auto; ">
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">De um topico a pagina:</label>
+                            <textarea class="form-control" name="titulo_pagina"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">Pergunta:</label>
+                            <textarea class="form-control" name="pergunta_simulado" id="pergunta"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">Alternativa A):</label>
+                            <textarea class="form-control" name="alternativa_a_simulado" id="alternativaA"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">Alternativa B):</label>
+                            <textarea class="form-control" name="alternativa_b_simulado" id="alternativaB"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">Alternativa C):</label>
+                            <textarea class="form-control" name="alternativa_c_simulado" id="alternativaC"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="message-text" class="col-form-label">Alternativa D):</label>
+                            <textarea class="form-control" name="alternativa_d_simulado" id="alternativaD"></textarea>
+                        </div>
+                        <div class="mb-1">
+                            <label for="message-text" class="col-form-label">resposta correta</label>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <input type="radio" id="alternativa1" name="alternativa_correta" value="A">
+                                    <label for="alternativa1">A</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="alternativa2" name="alternativa_correta" value="B">
+                                    <label for="alternativa2">B</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="alternativa3" name="alternativa_correta" value="C">
+                                    <label for="alternativa3">C</label>
+                                </li>
+                                <li>
+                                    <input type="radio" id="alternativa4" name="alternativa_correta" value="D">
+                                    <label for="alternativa4">D</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="position: relative; left: 35%; width: auto; ">
 
-                <button type="submit" class="btn btn-success" style="border-radius: 5px; width: 100px; "
-                    onclick="fecha_modal_add_pg()">enviar</button>
-                    <button type="button" class="btn btn-secondary" onclick="fecha_modal_add_pg()">Cancelar</button>
+                            <button type="submit" class="btn btn-success" style="border-radius: 5px; width: 100px; "
+                                onclick="fecha_modal_add_pg()">enviar</button>
+                            <button type="button" class="btn btn-secondary"
+                                onclick="fecha_modal_add_pg()">Cancelar</button>
 
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
-    </div>
-</div>
-</div>
+        </div>
 
 
-<!------------------------- FIM MODAL PARA adicionar pergunta --------------------------->
+        <!------------------------- FIM MODAL PARA adicionar pergunta --------------------------->
 
 
 
@@ -313,9 +349,10 @@ style="display: none; position:relative; top: -100px;  left: 0; right: 0; bottom
                         <!---------------fim Edita card -->
 
                         <!-- delete card -->
-                       
 
-                            <button type="button" onclick="delete_card('{{card.id}}', '{{card.pagina.id}}')" class="delete"><i class="fa-solid fa-trash"></i></button>
+
+                        <button type="button" onclick="delete_card('{{card.id}}', '{{card.pagina.id}}')"
+                            class="delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
                 {% endfor %}
@@ -328,19 +365,19 @@ style="display: none; position:relative; top: -100px;  left: 0; right: 0; bottom
     <!-- modal para delete -->
     <div id="modal_delete_card" style="display: none; top: 50%;">
         <div
-        style="position: absolute; justify-items: center; top: 35%; left: 40%; width: 500px; max-width: 60%; background-color: bisque; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
-        <form action="{% url 'delete_card' %}" method="POST">{% csrf_token %}   
-                   
-                        <input type="hidden" name="id_pagina_do_card" id="id_pagina_do_card">
-                        <input type="hidden" name="id_card" id="id_card">
-                        <h3>Tem certeza que deseja excluir a pagina?</h3>
-                
-                        <p>Todas as informações seram perdidas</p>
-                        <button type="button" onclick="delete_card_fecha_modal()" class="btn btn-secondary">Cancelar</button>
-                        <button type="submit" onclick="delete_card_fecha_modal()" class="btn btn-danger">Excluir</button>
-                    </form>
-                </div>
-            </div>
+            style="position: absolute; justify-items: center; top: 35%; left: 40%; width: 500px; max-width: 60%; background-color: bisque; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+            <form action="{% url 'delete_card' %}" method="POST">{% csrf_token %}
+
+                <input type="hidden" name="id_pagina_do_card" id="id_pagina_do_card">
+                <input type="hidden" name="id_card" id="id_card">
+                <h3>Tem certeza que deseja excluir a pagina?</h3>
+
+                <p>Todas as informações seram perdidas</p>
+                <button type="button" onclick="delete_card_fecha_modal()" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" onclick="delete_card_fecha_modal()" class="btn btn-danger">Excluir</button>
+            </form>
+        </div>
+    </div>
     <!--FIM modal delete-->
 
 
@@ -365,7 +402,8 @@ style="display: none; position:relative; top: -100px;  left: 0; right: 0; bottom
 
 
 
-            <button type="button" onclick="fecha_modal()" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+            <button type="button" onclick="fecha_modal()" class="close-modal-btn"><i
+                    class="fa-solid fa-xmark"></i></button>
 
 
 

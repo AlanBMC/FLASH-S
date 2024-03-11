@@ -57,3 +57,19 @@ class EstatisticasSimulado(models.Model):
 
     def __str__(self):
         return f'{self.usuario} - {self.pagina} - Data: {self.data}'
+    
+class EnemRespostas(models.Model):
+    ano = models.IntegerField()
+    dia = models.IntegerField()
+    resposta = models.CharField()
+    ingles = models.BooleanField(default=False)
+    espanhol = models.BooleanField(default=False)
+    numero_questao = models.IntegerField()
+
+class EstatisticasEnem_usuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='enem_usuario')
+    resposta_usario = models.TextField()
+    correto_errada = models.BooleanField()
+    idioma_escolhido = models.IntegerField(default=1)
+    questao = models.ForeignKey(EnemRespostas, on_delete=models.CASCADE, related_name='resposta_enem')
+
