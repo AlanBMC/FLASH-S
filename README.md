@@ -32,16 +32,15 @@ A ferramenta usada:
 <img align="center" alt="Live Server" height="38" width="120" src="https://img.shields.io/badge/VScode-323330?style=for-the-badge&logo=visual-studio-code&logoColor=blue">
 </div>
 
-## Contact
-<strong> Projeto desenvolvido por: </strong> We are both Computer Science students at the Federal University of Mato Grosso - Class of 2022.
+## Sobre o autor
 
-| Alan Bruno Moraes Costa |
-| --- | --- |
-|<img src="/flashcards/flash/static/img/img_home/eu.jpg" alt="Alan's Photo" width="100"/> |
-
+<!-- Coloque seu nome, uma foto sua e uma pequena bio sobre você na seguinte tabela: -->
+|  |  |
+|:-------------:|:------------------------------------------------------------:|
+|  <img src="eu.png" width="150px"></br> **Nome do Autor** | 
 
 - **Email:** alanbrunomoraescosta18@hotmail.com
 - **LinkedIn:** [Alan's LinkedIn](https://www.linkedin.com/in/alan-morais-4861322b0)
 
 
-##Fluxo
+## Fluxo
