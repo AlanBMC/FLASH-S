@@ -37,7 +37,7 @@ A ferramenta usada:
 <!-- Coloque seu nome, uma foto sua e uma pequena bio sobre você na seguinte tabela: -->
 |  |  |
 |:-------------:|:------------------------------------------------------------:|
-|  <img src="eu.png" width="150px"></br> **Nome do Autor** | 
+|  <img src="eu.jpg" width="150px"></br> **Nome do Autor** | 
 
 - **Email:** alanbrunomoraescosta18@hotmail.com
 - **LinkedIn:** [Alan's LinkedIn](https://www.linkedin.com/in/alan-morais-4861322b0)
