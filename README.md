@@ -4,14 +4,11 @@ Projeto final para Cyber-Edux. <strong> Veja o projeto em: [CARDY](https://githu
 
 
 
+
 ## Sobre o autor
 
+<!-- Coloque seu nome, uma foto sua e uma pequena bio sobre você na seguinte tabela: -->
 |  |  |
 |:-------------:|:------------------------------------------------------------:|
-|  <img src="eu.jpg" width="150px"></br> **Nome do Autor** | 
-
-- **Email:** alanbrunomoraescosta18@hotmail.com
-- **LinkedIn:** [Alan's LinkedIn](https://www.linkedin.com/in/alan-morais-4861322b0)
-
-
-## Fluxo
+|  <img src="EU2.jpg" width="150px"></br> **Alan Bruno Morais Costa** | 
+Me chamo Alan, sou estudante de Ciências da Computação na Universidade Federal de Mato Grosso (UFMT) e estou participando de um curso oferecido pela Cyber-edux. Neste repositório, apresento o Cardy, um sistema inovador de gerenciamento de tarefas e estudos projetado para melhorar a organização e eficiência de estudantes e profissionais.  |
